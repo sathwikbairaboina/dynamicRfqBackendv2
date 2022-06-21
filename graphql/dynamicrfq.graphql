@@ -1,0 +1,120 @@
+# graphql/schema.graphql
+enum FormFieldType {
+  Input
+  PriceInput
+  NumberInput
+  Select
+  DatePicker
+  TextAreaInput
+}
+
+
+type Options {
+  text: String
+  value: String
+}
+
+input OptionsInput{
+  text: String
+  value: String
+}
+
+
+
+type FormFields {
+  id: ID
+  label: String
+  type: FormFieldType
+  value: String
+  options: [Options]
+}
+
+
+
+type Steps {
+  id: ID
+  title: String
+  description: String
+}
+
+input FormFieldsInput {
+  id: ID
+  label: String
+  type: FormFieldType
+  value: String
+  options:[OptionsInput]
+}
+
+input StepsInput {
+  id: ID
+  title: String
+  description: String
+  type: String
+}
+
+
+type Service {
+  id: ID!
+  name: String!
+  description: String!
+  rfqBasicFormDetails: [FormFields]
+  rfqSteps:[Steps]
+  type: String
+  record: String
+}
+
+type Rfq {
+    id: ID!
+    userName: String!
+    userId: String!
+    basicFormDetails: [FormFields]
+    status: String
+    additionalDetails:String
+    pdfUrl:String
+    steps: [Steps]
+    service: Service 
+    type: String
+    record: String
+    serviceId: String
+}
+
+
+
+input ServiceInput {
+  id: ID
+  name: String
+  description: String
+  rfqBasicFormDetails: [FormFieldsInput]
+  rfqSteps:[StepsInput]
+}
+
+input RfqInput {
+    id: ID
+    userName: String
+    userId: String!
+    basicFormDetails: [FormFieldsInput]
+    status: String
+    additionalDetails:String
+    pdfUrl:String
+    service: ServiceInput 
+    serviceId: String
+}
+
+
+
+
+type Query {
+  getAllServices: [Service]
+  getServiceById(id: ID!): Service
+  getRfqById(id: ID!): Rfq
+  getRfqByUserName(name:String!):[Rfq]
+  getAllRfq: [Rfq]
+  getRfqByService(id:String): [Rfq]
+}
+
+type Mutation {
+  createOrUpdateService(service: ServiceInput!): Service
+  createOrUpdateRfq(rfq: RfqInput!): Rfq
+  deleteRfq(id: ID!): String
+  deleteService(id: ID!): String
+}
